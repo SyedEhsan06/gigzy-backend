@@ -28,7 +28,12 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/gigs', gigRoutes);
 app.use('/api/bids', bidRoutes);
-
+app.get('/', (req, res) => {
+  res.send('GigFlow API is running');
+});
+app.use('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.message);
   res.status(500).json({ message: err.message || 'Server Error' });
