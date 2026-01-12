@@ -48,16 +48,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const payload = { user: { id: user._id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-    // Set cookie — allow cross-site cookies in production (SameSite=None) so frontend can send them from a different domain
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     res.status(201).json({ 
       message: 'User registered successfully',
+      token,
       user: { id: user._id, name: user.name, email: user.email }
     });
   } catch (error) {
@@ -101,17 +94,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const payload = { user: { id: user._id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-
-    // Set cookie — allow cross-site cookies in production (SameSite=None) so frontend can send them from a different domain
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     res.json({ 
       message: 'Logged in successfully',
+      token,
       user: { id: user._id, name: user.name, email: user.email}
     });
   } catch (error) {
@@ -121,12 +106,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    // When cookies are set with SameSite=None, clearCookie should also specify sameSite:none
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  });
+  // Token-based auth: client handles removing token from storage
   res.json({ message: 'Logged out successfully' });
 };
 
