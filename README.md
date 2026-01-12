@@ -22,18 +22,29 @@ npm install
 ```
 
 3. Environment Setup
+
 Copy `.env.example` to `.env` and configure:
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your values:
+Environment variables (set in `.env`):
+
+- `PORT` — Port the server listens on (default: `5000`)
+- `MONGO_URI` — MongoDB connection URI (default: `mongodb://localhost:27017/gigflow`)
+- `JWT_SECRET` — Secret used to sign JWTs (replace with a strong secret)
+- `NODE_ENV` — Node environment (`development` | `production`)
+- `CLIENT_URL` — Frontend client URL (used for CORS)
+- `CORS_ORIGINS` — Comma-separated list of allowed origins (e.g., `http://localhost:5173,http://localhost:3000`)
+
+Example `.env`:
 ```
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/gigflow
-JWT_SECRET=your_secret_jwt_key_here_make_it_long_and_secure
+JWT_SECRET=your_strong_jwt_secret
 NODE_ENV=development
 CLIENT_URL=http://localhost:5173
+CORS_ORIGINS=http://localhost:5173,http://localhost:3000
 ```
 
 4. Start the server
